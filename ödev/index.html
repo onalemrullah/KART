@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+        height: 100vh;
+        display: grid;
+        grid-template-rows: 1fr 3fr;
+    }
+    section:nth-child(1){
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+    }
+    ul{
+        display: flex;
+    }
+    ul > li{
+        list-style: none;
+        margin: 10px;
+    }
+    section:nth-child(2){
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+    }
+    section:nth-child(2) > div{
+        margin: 40px;
+        padding: 25px;
+        border: 1px solid black;
+        border-radius: 10px;
+    }
+    img{
+        height: 200px;
+        width: 150px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+button{
+    margin: 10px;
+
+}
+p{
+    margin: 20px;
+}
+.kart {
+    flex: 0 0 200px;
+    height: 300px;
+    border: 1px solid black;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+  }
+  .kart.cevap {
+    background-color: green;
+  }
+  
+  .kart.yanlis {
+    background-color: red;
+  }
+
+</style>
+<body>
+    <section>
+        <h1>FUTBOLCU KARTLARI</h1>
+        <div id="kart-sorulari">
+            <p id="soru"></p>
+        </div>
+    </section>
+    <section>
+       <div class="kart">
+     <img src="resimler/messi.jpg" title="messi">
+       </div>
+       <div class="kart">
+     <img src="resimler/ronaldo.jpg" title="ronaldo">
+       </div>
+       <div class="kart">
+     <img src="resimler/neymar.jpg" title="neymar">
+       </div>
+    </section>
+</body>
+<script>
+    let secilenn;
+       let dogru=0;
+       let yanlış=0;
+    const futbolcular={
+        messi:{
+            sorular: ["Gol sayısı kaç?","Kariyer maç sayısı?","Kırmızı kart sayısı?"],
+      cevaplar:[785,900,5] 
+        },
+        ronaldo:{
+            sorular: ["Gol sayısı kaç?","Kariyer maç sayısı?","Kırmızı kart sayısı?"],
+      cevaplar:[850,1000,3] 
+
+        },
+        neymar:{
+            sorular: ["Gol sayısı kaç?","Kariyer maç sayısı?","Kırmızı kart sayısı?"],
+      cevaplar:[250,500,15]
+        }
+    };
+       let alanlar=document.getElementsByTagName("img");
+       [...alanlar].forEach((alan,index)=>{
+           alan.addEventListener("click",()=>{
+               let secilen=alan.getAttribute("title");
+               secilenn=alan.parentNode;
+               goster(secilen);
+           });
+       });
+       let sayac=0;
+     let alınanlar=[];
+        
+       function goster(secilen){
+    if (alınanlar.includes(secilen)){
+        alert("önceden seçilen kartı bir daha seçemezsin");
+    }
+    else{
+        const silinecekler=document.getElementsByTagName("button");
+        [...silinecekler].forEach((silinecek)=>{
+            silinecek.remove();
+        });
+        sayac=sayac+1;
+        if (sayac<=3){
+         
+           let bilgiler=futbolcular[secilen];
+            let random=Math.round(Math.random()*2);
+           let sorular=bilgiler['sorular'];
+           let soru=sorular[random];
+           let cevaplar=bilgiler['cevaplar'];
+           let cevap=cevaplar[random];
+          
+           let secenekler=[];
+           let ran=Math.round(Math.random()*1);
+           if (ran==0){
+            secenekler.push(parseInt(cevap));
+            secenekler.push(Math.round(Math.random()*cevap));
+           }
+           else{
+            secenekler.push(Math.round(Math.random()*cevap));
+            secenekler.push(cevap);
+           }
+        
+        document.getElementById("soru").innerHTML=secilen+" "+soru;
+           for (let i=0; i<=1; i++){
+      
+      const yeniSecenek=document.createElement("button");
+      yeniSecenek.innerHTML=secenekler[i];
+      document.getElementById("kart-sorulari").appendChild(yeniSecenek);
+           yeniSecenek.addEventListener("click",hesap);
+            
+      
+           }
+       
+        
+          function hesap(){
+           let kullaniciCevap=this.innerHTML;
+           
+            if (cevap==kullaniciCevap){
+              alert("doğru cevap");
+              secilenn.classList.remove("yanlis");
+              secilenn.classList.add("cevap");
+              dogru=dogru+1;
+            }
+            else{
+                alert("yanlış cevap");
+                secilenn.classList.remove("dogru");
+                secilenn.classList.add("yanlis");
+                yanlış=yanlış+1;
+            }
+            
+           } 
+        }
+        else{
+            if (dogru>yanlış){
+                alert("kazandınız");
+             
+                
+            }
+            else{
+                alert("kaybeiniz")
+            }
+        }
+    }
+    alınanlar.push(secilen);
+    }
+     
+          
+       
+        
+</script>
+</html>
